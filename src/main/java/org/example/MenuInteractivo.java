@@ -56,35 +56,92 @@ public class MenuInteractivo {
             System.out.println("Ingrese los datos del producto:");
             System.out.print("ID: ");
             String id = scanner.nextLine();
-            System.out.print("Nombre: ");
-            String nombre = scanner.nextLine();
-            System.out.print("Categoría: ");
-            String categoria = scanner.nextLine();
-            System.out.print("Descripción: ");
-            String descripcion = scanner.nextLine();
-            System.out.print("Precio: ");
-            double precio = scanner.nextDouble();
-            System.out.print("Stock: ");
-            int stock = scanner.nextInt();
-            System.out.print("Peso: ");
-            double peso = scanner.nextDouble();
-            scanner.nextLine(); // Consumir nueva línea
-            System.out.print("Proveedor: ");
-            String proveedor = scanner.nextLine();
-            System.out.print("Fecha de ingreso: ");
-            String fechaIngreso = scanner.nextLine();
-            System.out.print("Descuento: ");
-            double descuento = scanner.nextDouble();
 
-            Producto nuevoProducto = new Producto(id, nombre, categoria, descripcion, precio, stock, peso, proveedor, fechaIngreso, descuento);
-            inventario.agregarProducto(nuevoProducto);
-            serializadora.serializarProductos("productos.poo", inventario.getProductos());
+            try {
+                // Intentamos buscar el producto por su ID
+                Producto productoExistente = inventario.buscarProducto(id);
 
-            System.out.println("Producto agregado o actualizado exitosamente.");
+                // Si el producto ya existe, preguntar si desea actualizarlo
+                System.out.println("Producto con ID " + id + " ya existe. ¿Desea actualizarlo? (S/N)");
+                String respuesta = scanner.nextLine();
+
+                if (respuesta.equalsIgnoreCase("S")) {
+                    // Si la respuesta es "S", actualizamos el producto
+                    System.out.print("Nuevo nombre: ");
+                    String nombre = scanner.nextLine();
+                    System.out.print("Nueva categoría: ");
+                    String categoria = scanner.nextLine();
+                    System.out.print("Nueva descripción: ");
+                    String descripcion = scanner.nextLine();
+                    System.out.print("Nuevo precio: ");
+                    double precio = scanner.nextDouble();
+                    System.out.print("Nuevo stock: ");
+                    int stock = scanner.nextInt();
+                    System.out.print("Nuevo peso: ");
+                    double peso = scanner.nextDouble();
+                    scanner.nextLine(); // Consumir nueva línea
+                    System.out.print("Nuevo proveedor: ");
+                    String proveedor = scanner.nextLine();
+                    System.out.print("Nueva fecha de ingreso: ");
+                    String fechaIngreso = scanner.nextLine();
+                    System.out.print("Nuevo descuento: ");
+                    double descuento = scanner.nextDouble();
+
+                    // Actualizamos los valores del producto existente
+                    productoExistente.setNombre(nombre);
+                    productoExistente.setCategoria(categoria);
+                    productoExistente.setDescripcion(descripcion);
+                    productoExistente.setPrecio(precio);
+                    productoExistente.setStock(stock);
+                    productoExistente.setPeso(peso);
+                    productoExistente.setProveedor(proveedor);
+                    productoExistente.setFechaIngreso(fechaIngreso);
+                    productoExistente.setDescuento(descuento);
+
+                    // Guardamos los cambios en el archivo
+                    serializadora.serializarProductos("productos.poo", inventario.getProductos());
+                    System.out.println("Producto actualizado exitosamente.");
+                } else {
+                    System.out.println("El producto no se actualizó.");
+                }
+            } catch (ProductoNoEncontradoException e) {
+                // Si el producto no existe, pedimos los datos para agregar un nuevo producto
+                System.out.println(e.getMessage());
+                System.out.println("Agregando nuevo producto...");
+
+                System.out.print("Nombre: ");
+                String nombre = scanner.nextLine();
+                System.out.print("Categoría: ");
+                String categoria = scanner.nextLine();
+                System.out.print("Descripción: ");
+                String descripcion = scanner.nextLine();
+                System.out.print("Precio: ");
+                double precio = scanner.nextDouble();
+                System.out.print("Stock: ");
+                int stock = scanner.nextInt();
+                System.out.print("Peso: ");
+                double peso = scanner.nextDouble();
+                scanner.nextLine(); // Consumir nueva línea
+                System.out.print("Proveedor: ");
+                String proveedor = scanner.nextLine();
+                System.out.print("Fecha de ingreso: ");
+                String fechaIngreso = scanner.nextLine();
+                System.out.print("Descuento: ");
+                double descuento = scanner.nextDouble();
+
+                Producto nuevoProducto = new Producto(id, nombre, categoria, descripcion, precio, stock, peso, proveedor, fechaIngreso, descuento);
+                inventario.agregarProducto(nuevoProducto);
+                serializadora.serializarProductos("productos.poo", inventario.getProductos());
+
+                System.out.println("Producto agregado exitosamente.");
+            }
+
         } catch (ErrorEscrituraArchivoException e) {
             System.err.println(e.getMessage());
         }
     }
+
+
 
     private void buscarProducto() {
         try {

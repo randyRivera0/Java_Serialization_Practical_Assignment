@@ -30,13 +30,14 @@ public class Main {
         // Intentar cargar productos desde el archivo serializado
         try {
             inventario.setProductos(serializadora.deserializarProductos(rutaSalida));
+            menu.iniciar();
             System.out.println("Archivo de productos cargado exitosamente.");
         } catch (ArchivoNoEncontradoException e) {
             System.err.println(e.getMessage());
-            System.out.println("Iniciando inventario vacío.");
+            System.out.println("No se pudo cargar el archivo de productos. No es posible gestionar el inventario.");
         }
 
-        menu.iniciar();
+        // Cerrar el scanner al final
         scanner.close();
     }
 }
